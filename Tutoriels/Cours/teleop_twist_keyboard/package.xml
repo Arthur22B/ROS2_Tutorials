@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>teleop_twist_keyboard</name>
+  <version>1.0.0</version>
+  <description>Télécommande ROS2 pour TurtleBot3</description>
+  <maintainer email="arthur.bouille@insa-strasbourg.fr">insa</maintainer>
+  <license>TODO: License declaration</license>
+
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  
+  
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>
