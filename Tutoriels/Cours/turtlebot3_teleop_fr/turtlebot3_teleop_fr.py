@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Nov 27 21:54:30 2023
+
+@author: bouille arthur
+INSA Strasbourg GE5
+"""
+
 import sys
 import threading
 
