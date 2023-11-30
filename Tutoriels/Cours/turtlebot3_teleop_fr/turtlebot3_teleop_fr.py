@@ -19,18 +19,17 @@ else:
     import tty
 
 msg1 = """
-
 Ce noeud prend les touches du clavier et les publie sous forme 
 de messages Twist/TwistStamped.
 """
 
 msg = """
 ---------------------------
-Se déplacer :
-   a    z    e       t/y : +/- 0.05 vitesse linéaire et angulaire
-   q    s    d       g/h : +/- 0.05 vitesse linéaire
-   w    x    c       b/n : +/- 0.05 vitesse angulaire
-                       r : reset vitesses (0.5 et 1.0)
+Se déplacer :        Réglages vitesses :
+   a    z    e       t/y : +/- 0.01 linéaire et +/- 0.05 angulaire
+   q    s    d       g/h : +/- 0.01 linéaire
+   w    x    c       b/n : +/- 0.05 angulaire
+                       r : reset vitesses (0.1 et 1.0)
 
 Autres touches : stop !
 
@@ -51,11 +50,11 @@ moveBindings = {
 }
 
 speedBindings = {
-    'r': (0.5, 1.0), # Reset vitesses
-    't': (0.05, 0.05),
-    'y': (-0.05, -0.05),
-    'g': (0.05, 0),
-    'h': (-0.05, 0),
+    'r': (0.1, 1.0), # Reset vitesses
+    't': (0.01, 0.05),
+    'y': (-0.01, -0.05),
+    'g': (0.01, 0),
+    'h': (-0.01, 0),
     'b': (0, 0.05),
     'n': (0, -0.05),
 
@@ -112,7 +111,7 @@ def main():
     spinner = threading.Thread(target=rclpy.spin, args=(node,))
     spinner.start()
 
-    speed = 0.5
+    speed = 0.1
     turn = 1.0
     x = 0.0
     y = 0.0
@@ -145,9 +144,23 @@ def main():
                 if key != 'r': # Si pas reset on modifie les valeurs de vitesses 
                     speed = round(speed + speedBindings[key][0],2)
                     turn = round(turn + speedBindings[key][1],2)
-                    
-                else:          # On reset les valeurs des vitesses
-                    speed = 0.5
+                    # Vérification par rapport au valeur de vitesse max pour le turtlebot burger
+                    # 0.22 en linéaire et 2.84 en angulaire
+                    if speed > 0.22:
+                        speed = 0.22
+                        print("Vitesse linéaire 0.22 maximum !")
+                    elif speed < -0.22:
+                        speed = -0.22
+                        print("Vitesse linéaire -0.22 minimum !")
+                    if turn > 2.84:
+                        turn = 2.84
+                        print("Vitesse angulaire 2.84 maximum !")
+                    elif turn < -2.84:
+                        turn = -2.84
+                        print("Vitesse angulaire -2.84 minimum !")
+
+                else:          # On reset les valeurs des vitesses si 'r'
+                    speed = 0.1
                     turn = 1.0
 
                 print(vels(speed, turn))
